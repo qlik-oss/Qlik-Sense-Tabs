@@ -19,13 +19,12 @@ Remove "images", "preview.png", "README.md" and other git related files before i
 
 ## Usage
 1. Open a Qlik Sense App.
-2. Create charts you would like to display on the tab extension and add them to master items. (You can delete the charts after you added them to master items.) 
+2. Create charts you would like to display on the tab extension and add them to master items. (You can delete the charts after you added them to master items.)
 3. Drag and drop the "Tabs" extension onto the canvas.
 4. On the extension property, navigate to Settings>Properties and change the "Number of Tabs" to change the number of tabs displayed on the extension.
 5. Select a chart on the drop-down list and modify the label for each tab.
 
 ## Limitations
-1. Right-click context menu (including take snapshot, open exploration menu, export to PDF, etc) cannot be used for tabbed chart. "Export data" is shown on the context menu, but it produces error when executed.
 2. Export button on the tabs can be used only for those charts which support data export. (Data export of pivot table, tree map chart, etc is not supported Qlik Sense 2.1. Also, you can not export data from filters.)
 
 ## Licence

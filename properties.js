@@ -3,12 +3,9 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 
 	var app = qlik.currApp(this);
 
-
 	// ****************************************************************************************
 	// Properties Definition
 	// ****************************************************************************************
-
-
 	var getMasterObjectList = function () {
 
 		var defer = $q.defer();
@@ -30,9 +27,8 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 		return defer.promise;
 	};
 
-
-    //Number of Tabs
-  	var num_of_tabs = {
+  //Number of Tabs
+  var num_of_tabs = {
 		ref : "props.num_of_tabs",
 		label	 : "Number of Tabs",
 		type : "string",
@@ -53,75 +49,74 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 				}, {
 					value: "5",
 					label: "5"
-				}
-				]
+				}]
 	};
 
 
-    //Chart for Tab1
-  	var chart_for_tab1 = {
+  //Chart for Tab1
+  var chart_for_tab1 = {
 		ref : "props.chart_for_tab1",
 		label	 : "Chart1",
 		component : "dropdown",
 		type : "string",
 		//defaultValue : "V",
-        options: function () {
+    options: function () {
 			return getMasterObjectList().then( function ( items ) {
 				return items;
 			} );
 		}
 	};
 
-    //Chart for Tab2
-  	var chart_for_tab2 = {
+  //Chart for Tab2
+  var chart_for_tab2 = {
 		ref : "props.chart_for_tab2",
 		label	 : "Chart2",
 		component : "dropdown",
 		type : "string",
-		//defaultValue : "V",
-        options: function () {
+		show: function(data) { return data.props.num_of_tabs >= 2; },
+    options: function () {
 			return getMasterObjectList().then( function ( items ) {
 				return items;
 			} );
 		}
 	};
 
-    //Chart for Tab3
-  	var chart_for_tab3 = {
+  //Chart for Tab3
+	var chart_for_tab3 = {
 		ref : "props.chart_for_tab3",
 		label	 : "Chart3",
 		component : "dropdown",
 		type : "string",
-		//defaultValue : "V",
-        options: function () {
+		show: function(data) { return data.props.num_of_tabs >= 3; },
+    options: function () {
 			return getMasterObjectList().then( function ( items ) {
 				return items;
 			} );
 		}
 	};
 
-    //Chart for Tab4
-  	var chart_for_tab4 = {
+  //Chart for Tab4
+	var chart_for_tab4 = {
 		ref : "props.chart_for_tab4",
 		label	 : "Chart4",
 		component : "dropdown",
 		type : "string",
-		//defaultValue : "V",
-        options: function () {
+		show: function(data) { return data.props.num_of_tabs >= 4; },
+    options: function () {
 			return getMasterObjectList().then( function ( items ) {
 				return items;
 			} );
 		}
 	};
 
-    //Chart for Tab5
-  	var chart_for_tab5 = {
+  //Chart for Tab5
+	var chart_for_tab5 = {
 		ref : "props.chart_for_tab5",
 		label	 : "Chart5",
 		component : "dropdown",
 		type : "string",
-		//defaultValue : "V",
-        options: function () {
+		show: function(data) { return data.props.num_of_tabs >= 5; },
+    options: function () {
 			return getMasterObjectList().then( function ( items ) {
 				return items;
 			} );
@@ -129,7 +124,7 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 	};
 
 	//Chart Label1
-  	var label_for_tab1 = {
+  var label_for_tab1 = {
 		ref : "props.label_for_tab1",
 		label	 : "Label1",
 		type : "string",
@@ -137,86 +132,89 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 	};
 
 	//Chart Label2
-  	var label_for_tab2 = {
+  var label_for_tab2 = {
 		ref : "props.label_for_tab2",
 		label	 : "Label2",
 		type : "string",
+		show: function(data) { return data.props.num_of_tabs >= 2; },
 		defaultValue : "Tab2"
 	};
 
-		//Chart Label3
-  	var label_for_tab3 = {
+	//Chart Label3
+  var label_for_tab3 = {
 		ref : "props.label_for_tab3",
 		label	 : "Label3",
 		type : "string",
+		show: function(data) { return data.props.num_of_tabs >= 3; },
 		defaultValue : "Tab3"
 	};
 
-		//Chart Label4
-  	var label_for_tab4 = {
+	//Chart Label4
+  var label_for_tab4 = {
 		ref : "props.label_for_tab4",
 		label	 : "Label4",
 		type : "string",
+		show: function(data) { return data.props.num_of_tabs >= 4; },
 		defaultValue : "Tab4"
 	};
 
-		//Chart Label5
-  	var label_for_tab5 = {
+	//Chart Label5
+	var label_for_tab5 = {
 		ref : "props.label_for_tab5",
 		label	 : "Label5",
 		type : "string",
+		show: function(data) { return data.props.num_of_tabs >= 5; },
 		defaultValue : "Tab5"
 	};
 
 	//Export Checkbox1
-  	var export_for_tab1 = {
+	var export_for_tab1 = {
 		ref : "props.export_for_tab1",
-		label
-		: "Enable export for chart1",
+		label: "Enable export for chart1",
 		type : "boolean",
 		defaultValue : true
 	};
 
 	//Export Checkbox2
-  	var export_for_tab2 = {
+  var export_for_tab2 = {
 		ref : "props.export_for_tab2",
-		label
-		: "Enable export for chart2",
+		label: "Enable export for chart2",
 		type : "boolean",
+		show: function(data) { return data.props.num_of_tabs >= 2; },
 		defaultValue : true
 	};
-	
+
 	//Export Checkbox3
-  	var export_for_tab3 = {
+	var export_for_tab3 = {
 		ref : "props.export_for_tab3",
-		label
-		: "Enable export for chart3",
+		label	: "Enable export for chart3",
 		type : "boolean",
+		show: function(data) { return data.props.num_of_tabs >= 3; },
 		defaultValue : true
 	};
-	
+
 	//Export Checkbox4
-  	var export_for_tab4 = {
+	var export_for_tab4 = {
 		ref : "props.export_for_tab4",
-		label
-		: "Enable export for chart4",
+		label : "Enable export for chart4",
 		type : "boolean",
+		show: function(data) { return data.props.num_of_tabs >= 4; },
 		defaultValue : true
 	};
-	
+
 	//Export Checkbox5
-  	var export_for_tab5 = {
+  var export_for_tab5 = {
 		ref : "props.export_for_tab5",
-		label
-		: "Enable export for chart5",
+		label : "Enable export for chart5",
 		type : "boolean",
+		show: function(data) { return data.props.num_of_tabs >= 5; },
 		defaultValue : true
 	};
-	
+
 	// ****************************************************************************************
 	// Property Panel Definition
 	// ****************************************************************************************
-	// Settings -Properties 
+	// Settings -Properties
 	var myCustomSection = {
 		component : "expandable-items",
 		label : "Settings",
