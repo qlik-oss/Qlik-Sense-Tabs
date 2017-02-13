@@ -1,5 +1,5 @@
 define( [
-		"qlik" 
+		"qlik"
 		,"./properties"
 		,"text!./css/tab.css"
 ],
@@ -22,11 +22,11 @@ function ( qlik, props, cssContent ) {
 		}
 		tab_content += 				'<div id="viz' + tab_id + '-' + object_id + '" class="qvobject"></div>';
 		tab_content += 			'</main>';
-		tab_content += 		'</section>';		
+		tab_content += 		'</section>';
 
-		return tab_content;	
+		return tab_content;
 	}
-	
+
 	function createInstruction(tab_id,object_id){
 		var tab_content = "";
 		tab_content += 		'<section id="panel-' + tab_id + '-' + object_id + '" >';
@@ -39,8 +39,8 @@ function ( qlik, props, cssContent ) {
 		tab_content += "<li>Select a chart on the drop-down list and modify the label for each tab.</li>";
 		tab_content += "</ol>";
 		tab_content += 			'</main>';
-		tab_content += 		'</section>';	
-		return tab_content;	
+		tab_content += 		'</section>';
+		return tab_content;
 	}
 
 	function createChartObject(tab_id,object_id,layout) {
@@ -51,24 +51,25 @@ function ( qlik, props, cssContent ) {
 	function createExportEvent(tab_id,object_id,layout){
 		var object = app.getObject( 'viz' + tab_id + '-' + object_id, eval("layout.props.chart_for_tab" + tab_id));
 
-		//Add excel download event to the button			  		  
-		object.then(function(model) {       
-   			var table = new qlik.table(model);  
-        	$('#export_data-' + tab_id + '-' + object_id ).on('click', function(e) {  
-		  		e.preventDefault(); 
-         		table.exportData({download: true});  
-       		})       
-		}) 
+		//Add excel download event to the button
+		object.then(function(model) {
+   			var table = new qlik.table(model);
+        	$('#export_data-' + tab_id + '-' + object_id ).on('click', function(e) {
+		  		e.preventDefault();
+         		table.exportData({download: true});
+       		})
+		})
 	}
 
 	return {
 		initialProperties : {
 			version : 1.0
 		},
-	  	definition: ( props )
-	  	,
-		snapshot: {
-			canTakeSnapshot: true
+	  definition: ( props ),
+		support : {
+				export: false,
+				exportData: false,
+				snapshot: false
 		},
 		paint: function ($element, layout) {
 
@@ -94,21 +95,21 @@ function ( qlik, props, cssContent ) {
 			// Create tabs
 			html += '<ul id="tabs-list">';
 		    html += 	'<label id="open-nav-label" for="nav-ctrl"></label>';
-			for (i=1; i<=num_of_tabs; i++) {				
+			for (i=1; i<=num_of_tabs; i++) {
 				html += '<li id="li-for-panel-' + i + '-' +  object_id + '" style="width:' + width + '%">';
 			    html += 	'<label class="panel-label" for="panel-' + i + '-ctrl-' + object_id + '">' + eval("layout.props.label_for_tab" + i) + '</label>';
 			    html += '</li>';
 			}
-		    html +=		'<label id="close-nav-label" for="nav-ctrl">Close</label>';		    
+		    html +=		'<label id="close-nav-label" for="nav-ctrl">Close</label>';
 			html += '</ul>';
 
-			// Create tab contents 
+			// Create tab contents
 			html += '<article id="panels">';
 			html += 	'<div class="container">';
 			for (i=1; i<=num_of_tabs; i++) {
-				if(eval("layout.props.chart_for_tab" + i)) {	
+				if(eval("layout.props.chart_for_tab" + i)) {
 					html += createTabContent(i,object_id,eval("layout.props.export_for_tab" + i));
-					
+
 					if(eval("layout.props.export_for_tab" + i)) {
 						createExportEvent(i,object_id,layout);
 					}
@@ -128,7 +129,7 @@ function ( qlik, props, cssContent ) {
 			if(repeated==1){
 				qlik.resize();
 			}
-						
+
 			// Get tab1 object
 			if(layout.props.chart_for_tab1 && repeated > 1) {
 				//app.visualization.get(layout.props.chart_for_tab1).then(function(vis){
@@ -136,7 +137,7 @@ function ( qlik, props, cssContent ) {
 				//});
 
 			    createChartObject("1", object_id, layout);
-			  
+
 				opened_object_id.push(layout.props.chart_for_tab1);
 			}
 
@@ -154,17 +155,17 @@ function ( qlik, props, cssContent ) {
 				//Display the new panel
 				$("#panel-" + tab_id + '-' + object_id).css("height","100%");
 
-				if(eval("layout.props.chart_for_tab" + tab_id)) {	
+				if(eval("layout.props.chart_for_tab" + tab_id)) {
 					// Get the new object
 					//app.visualization.get(eval("layout.props.chart_for_tab" + tab_id)).then(function(vis){
-					//	vis.show('viz' + tab_id + '-' + object_id);						
+					//	vis.show('viz' + tab_id + '-' + object_id);
 					//});
-				  
+
 				  	createChartObject(tab_id,object_id,layout);
 
 					// Close the old object
 					//app.visualization.get(opened_object_id.pop()).then(function(vis){
-					//	vis.close();		
+					//	vis.close();
 					//});
 
 					// Store the new object ID
