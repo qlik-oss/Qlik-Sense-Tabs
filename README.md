@@ -25,6 +25,7 @@ Remove "images", "preview.png", "README.md" and other git related files before i
 5. Select a chart on the drop-down list and modify the label for each tab.
 
 ## Limitations
+1. Right-click context menu (including take snapshot, open exploration menu, export to PDF, etc) is disabled for tabbed chart.
 2. Export button on the tabs can be used only for those charts which support data export. (Data export of pivot table, tree map chart, etc is not supported Qlik Sense 2.1. Also, you can not export data from filters.)
 
 ## Licence
