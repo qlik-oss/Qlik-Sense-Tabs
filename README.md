@@ -6,7 +6,7 @@ The **Tabs for Qlik Sense** is an extension which allows you to add tabs on Qlik
 ![Alt text](./images/Demo.png)
 
 ## Install
-1. Download the latest version of Qlik Sense Advanced Analytics Toolbox extension from [releases](https://github.com/mhamano/advanced-analytics-toolbox/releases).
+1. Download the latest version of Qlik Sense Advanced Analytics Toolbox extension from [releases](https://github.com/mhamano/Qlik-Sense-Tabs/releases).
 2. Install extension:
   * Qlik Sense Desktop
 	 * To install, copy the folder included the .zip file to folder "C:\Users\[%Username%]\Documents\Qlik\Sense\Extensions\".
@@ -22,7 +22,7 @@ The **Tabs for Qlik Sense** is an extension which allows you to add tabs on Qlik
 
 ## Limitations
 1. Right-click context menu (including take snapshot, open exploration menu, export to PDF, etc) is disabled for tabbed chart.
-2. Data export button on the tabs can be used only for those charts which support data export. 
+2. Data export button on the tabs can be used only for those charts which support data export.
 
 ## Author
 **Masaki Hamano**
