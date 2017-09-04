@@ -52,7 +52,6 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 				}]
 	};
 
-
   //Chart for Tab1
   var chart_for_tab1 = {
 		ref : "props.chart_for_tab1",
