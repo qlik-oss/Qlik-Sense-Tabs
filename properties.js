@@ -220,7 +220,7 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 		items : {
 			header1 : {
 				type : "items",
-				label : "Properies",
+				label : "Properties",
 				items : {
 					num_of_tabs : num_of_tabs,
 					chart_for_tab1 : chart_for_tab1,
