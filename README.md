@@ -6,7 +6,7 @@ The **Tabs for Qlik Sense** is an extension which allows you to add tabs on Qlik
 ![Alt text](./images/Demo.png)
 
 ## Install
-1. Download the latest version of Qlik Sense Advanced Analytics Toolbox extension from [releases](https://github.com/mhamano/Qlik-Sense-Tabs/releases).
+1. Download the latest version of Tabs for Qlik Sense extension from [releases](https://github.com/mhamano/Qlik-Sense-Tabs/releases).
 2. Install extension:
   * Qlik Sense Desktop
 	 * To install, copy the folder included the .zip file to folder "C:\Users\[%Username%]\Documents\Qlik\Sense\Extensions\".
