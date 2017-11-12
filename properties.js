@@ -1,5 +1,8 @@
-define(["qlik", 'ng!$q'], function ( qlik, $q) {
+define(["qlik", 'angular'], function ( qlik, angular) {
 	//'use strict';
+	
+	var $injector = angular.injector( ['ng'] );
+	var $q = $injector.get('$q');
 
 	var app = qlik.currApp(this);
 
@@ -12,10 +15,12 @@ define(["qlik", 'ng!$q'], function ( qlik, $q) {
 
 		app.getAppObjectList( 'masterobject', function ( data ) {
 			var masterobject = [];
-			var sortedData = _.sortBy( data.qAppObjectList.qItems, function ( item ) {
-				return item.qData.rank;
+			var sortedData = data.qAppObjectList.qItems.sort(function ( item1, item2 ) {
+				if(item1.qData.rank < item2.qData.rank) return -1
+				if(item1.qData.rank > item2.qData.rank) return 1
+				return 0
 			} );
-			_.each( sortedData, function ( item ) {
+			sortedData.forEach(function ( item ) {
 				masterobject.push( {
 					value: item.qInfo.qId,
 					label: item.qMeta.title

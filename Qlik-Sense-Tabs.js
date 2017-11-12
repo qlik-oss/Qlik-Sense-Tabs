@@ -1,9 +1,10 @@
 define( [
+		'jquery',
 		'qlik'
 		,'./properties'
 		,'text!./css/styles.css'
 ],
-function ( qlik, props, cssContent ) {
+function ($, qlik, props, cssContent ) {
 
 	$('<style>').html(cssContent).appendTo('head');
 
