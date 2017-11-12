@@ -18,7 +18,7 @@ define(["qlik", 'angular'], function ( qlik, angular) {
 			var sortedData = data.qAppObjectList.qItems.sort(function ( item1, item2 ) {
 				if(item1.qData.rank < item2.qData.rank) return -1
 				if(item1.qData.rank > item2.qData.rank) return 1
-				return 0
+				return item1.qMeta.title.localeCompare(item2.qMeta.title)
 			} );
 			sortedData.forEach(function ( item ) {
 				masterobject.push( {
