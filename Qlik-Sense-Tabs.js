@@ -1,11 +1,10 @@
 define( [
+		'jquery',
 		'qlik'
 		,'./properties'
-		,'text!./css/styles.css'
+		,'css!./css/styles.css'
 ],
-function ( qlik, props, cssContent ) {
-
-	$('<style>').html(cssContent).appendTo('head');
+function ($, qlik, props, cssContent ) {
 
 	var app = qlik.currApp(this); //App object
 	var repeated = 1;	//Rendering repeat count
