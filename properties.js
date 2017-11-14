@@ -1,8 +1,5 @@
-define(["qlik", 'angular'], function ( qlik, angular) {
+define(["qlik"], function ( qlik ) {
 	//'use strict';
-	
-	var $injector = angular.injector( ['ng'] );
-	var $q = $injector.get('$q');
 
 	var app = qlik.currApp(this);
 
@@ -11,7 +8,7 @@ define(["qlik", 'angular'], function ( qlik, angular) {
 	// ****************************************************************************************
 	var getMasterObjectList = function () {
 
-		var defer = $q.defer();
+		var defer = qlik.Promise.defer();
 
 		app.getAppObjectList( 'masterobject', function ( data ) {
 			var masterobject = [];
