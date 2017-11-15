@@ -2,7 +2,7 @@
 	"name": "Tabs for Qlik Sense",
 	"description": "The Tabs for Qlik Sense is an extension which allows you to add tabs on Qlik Sense.",
 	"type": "visualization",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"icon": "cogwheel",
 	"preview": "preview.png",
 	"author": "Masaki Hamano",
