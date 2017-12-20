@@ -1,6 +1,9 @@
 define(["qlik"], function ( qlik ) {
 	//'use strict';
 
+	// Display export check box on property panel or not
+const activateExport = true;
+
 	var app = qlik.currApp(this);
 
 	// ****************************************************************************************
@@ -173,7 +176,8 @@ define(["qlik"], function ( qlik ) {
 		ref : "props.export_for_tab1",
 		label: "Enable export for chart1",
 		type : "boolean",
-		defaultValue : true
+		show: function(data) { return activateExport; },
+		defaultValue : false
 	};
 
 	//Export Checkbox2
@@ -181,8 +185,8 @@ define(["qlik"], function ( qlik ) {
 		ref : "props.export_for_tab2",
 		label: "Enable export for chart2",
 		type : "boolean",
-		show: function(data) { return data.props.num_of_tabs >= 2; },
-		defaultValue : true
+		show: function(data) { return activateExport && data.props.num_of_tabs >= 2; },
+		defaultValue : false
 	};
 
 	//Export Checkbox3
@@ -190,8 +194,8 @@ define(["qlik"], function ( qlik ) {
 		ref : "props.export_for_tab3",
 		label	: "Enable export for chart3",
 		type : "boolean",
-		show: function(data) { return data.props.num_of_tabs >= 3; },
-		defaultValue : true
+		show: function(data) { return activateExport && data.props.num_of_tabs >= 3; },
+		defaultValue : false
 	};
 
 	//Export Checkbox4
@@ -199,8 +203,8 @@ define(["qlik"], function ( qlik ) {
 		ref : "props.export_for_tab4",
 		label : "Enable export for chart4",
 		type : "boolean",
-		show: function(data) { return data.props.num_of_tabs >= 4; },
-		defaultValue : true
+		show: function(data) { return activateExport && data.props.num_of_tabs >= 4; },
+		defaultValue : false
 	};
 
 	//Export Checkbox5
@@ -208,8 +212,8 @@ define(["qlik"], function ( qlik ) {
 		ref : "props.export_for_tab5",
 		label : "Enable export for chart5",
 		type : "boolean",
-		show: function(data) { return data.props.num_of_tabs >= 5; },
-		defaultValue : true
+		show: function(data) { return activateExport && data.props.num_of_tabs >= 5; },
+		defaultValue : false
 	};
 
 	// ****************************************************************************************
