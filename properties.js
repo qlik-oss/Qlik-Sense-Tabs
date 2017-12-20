@@ -60,7 +60,7 @@ const activateExport = true;
   //Chart for Tab1
   var chart_for_tab1 = {
 		ref : "props.chart_for_tab1",
-		label	 : "Chart1",
+		label	 : "Tab 1 Chart",
 		component : "dropdown",
 		type : "string",
 		//defaultValue : "V",
@@ -74,7 +74,7 @@ const activateExport = true;
   //Chart for Tab2
   var chart_for_tab2 = {
 		ref : "props.chart_for_tab2",
-		label	 : "Chart2",
+		label	 : "Tab 2 Chart",
 		component : "dropdown",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 2; },
@@ -88,7 +88,7 @@ const activateExport = true;
   //Chart for Tab3
 	var chart_for_tab3 = {
 		ref : "props.chart_for_tab3",
-		label	 : "Chart3",
+		label	 : "Tab 3 Chart",
 		component : "dropdown",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 3; },
@@ -102,7 +102,7 @@ const activateExport = true;
   //Chart for Tab4
 	var chart_for_tab4 = {
 		ref : "props.chart_for_tab4",
-		label	 : "Chart4",
+		label	 : "Tab 4 Chart",
 		component : "dropdown",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 4; },
@@ -116,7 +116,7 @@ const activateExport = true;
   //Chart for Tab5
 	var chart_for_tab5 = {
 		ref : "props.chart_for_tab5",
-		label	 : "Chart5",
+		label	 : "Tab 5 Chart",
 		component : "dropdown",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 5; },
@@ -130,15 +130,15 @@ const activateExport = true;
 	//Chart Label1
   var label_for_tab1 = {
 		ref : "props.label_for_tab1",
-		label	 : "Label1",
+		label	 : "Tab 1 Label",
 		type : "string",
-		defaultValue : "Tab1"
+		defaultValue : "Tab 1"
 	};
 
 	//Chart Label2
   var label_for_tab2 = {
 		ref : "props.label_for_tab2",
-		label	 : "Label2",
+		label	 : "Tab 2 Label",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 2; },
 		defaultValue : "Tab2"
@@ -147,7 +147,7 @@ const activateExport = true;
 	//Chart Label3
   var label_for_tab3 = {
 		ref : "props.label_for_tab3",
-		label	 : "Label3",
+		label	 : "Tab 3 Label",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 3; },
 		defaultValue : "Tab3"
@@ -156,7 +156,7 @@ const activateExport = true;
 	//Chart Label4
   var label_for_tab4 = {
 		ref : "props.label_for_tab4",
-		label	 : "Label4",
+		label	 : "Tab 4 Label",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 4; },
 		defaultValue : "Tab4"
@@ -165,7 +165,7 @@ const activateExport = true;
 	//Chart Label5
 	var label_for_tab5 = {
 		ref : "props.label_for_tab5",
-		label	 : "Label5",
+		label	 : "Tab 5 Label",
 		type : "string",
 		show: function(data) { return data.props.num_of_tabs >= 5; },
 		defaultValue : "Tab5"
@@ -174,7 +174,7 @@ const activateExport = true;
 	//Export Checkbox1
 	var export_for_tab1 = {
 		ref : "props.export_for_tab1",
-		label: "Enable export for chart1",
+		label: "Enable export for Chart 1",
 		type : "boolean",
 		show: function(data) { return activateExport; },
 		defaultValue : false
@@ -183,7 +183,7 @@ const activateExport = true;
 	//Export Checkbox2
   var export_for_tab2 = {
 		ref : "props.export_for_tab2",
-		label: "Enable export for chart2",
+		label: "Enable export for Chart 2",
 		type : "boolean",
 		show: function(data) { return activateExport && data.props.num_of_tabs >= 2; },
 		defaultValue : false
@@ -192,7 +192,7 @@ const activateExport = true;
 	//Export Checkbox3
 	var export_for_tab3 = {
 		ref : "props.export_for_tab3",
-		label	: "Enable export for chart3",
+		label	: "Enable export for Chart 3",
 		type : "boolean",
 		show: function(data) { return activateExport && data.props.num_of_tabs >= 3; },
 		defaultValue : false
@@ -201,7 +201,7 @@ const activateExport = true;
 	//Export Checkbox4
 	var export_for_tab4 = {
 		ref : "props.export_for_tab4",
-		label : "Enable export for chart4",
+		label : "Enable export for Chart 4",
 		type : "boolean",
 		show: function(data) { return activateExport && data.props.num_of_tabs >= 4; },
 		defaultValue : false
@@ -210,7 +210,7 @@ const activateExport = true;
 	//Export Checkbox5
   var export_for_tab5 = {
 		ref : "props.export_for_tab5",
-		label : "Enable export for chart5",
+		label : "Enable export for Chart 5",
 		type : "boolean",
 		show: function(data) { return activateExport && data.props.num_of_tabs >= 5; },
 		defaultValue : false
