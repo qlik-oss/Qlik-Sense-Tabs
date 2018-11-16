@@ -1,0 +1,64 @@
+version: 2
+
+defaults: &defaults
+    working_directory: ~/qlik-tabbed-container
+    docker:
+      - image: circleci/node:7
+    environment:
+      GITHUB_ORG: "qlik-oss"
+      GITHUB_REPO: "Qlik-Sense-Tabs"
+      PACKAGE_NAME: "qlik-tabbed-container"
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build
+          command: npm run build:zip
+      - persist_to_workspace:
+          root: ~/qlik-tabbed-container
+          paths:
+            - dist
+  release:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/qlik-tabbed-container
+      - run:
+          name: Install GHR
+          command: |
+            sudo chmod +x ./.circleci/install-ghr.sh
+            ./.circleci/install-ghr.sh
+      - run:
+          name: Create github release
+          command: |
+            sudo chmod +x ./.circleci/get-package-version.sh
+            export PACKAGE_VERSION=$(./.circleci/get-package-version.sh)
+            echo "Version: ${PACKAGE_VERSION}"
+            sudo chmod +x ./.circleci/create-release.sh
+            ./.circleci/create-release.sh $GITHUB_ORG $GITHUB_REPO $PACKAGE_NAME $PACKAGE_VERSION
+
+workflows:
+  version: 2
+  build-release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only:
+                - /v.*/
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only:
+                - /v.*/
