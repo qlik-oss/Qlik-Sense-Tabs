@@ -1,5 +1,5 @@
 # Tabs for Qlik Sense
-The **Tabs for Qlik Sense** is an extension which allows you to add tabs on Qlik Sense. This extension is a part of dashboard bundle, first delivered with Qlik Sense November 2018.
+The **Tabs for Qlik Sense** is an extension which allows you to add tabs on Qlik Sense. This extension is a part of Qlik dashboard bundle, first delivered with Qlik Sense November 2018.
 
 ## Screen shot
 
