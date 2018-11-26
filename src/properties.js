@@ -2,9 +2,7 @@ define(["qlik"], function (qlik) {
     var KNOWN_CONTAINERS = ['qlik-show-hide-container', 'qlik-tabbed-container'];
 
     var app = qlik.currApp(this),
-        permission = null,
-        masterObjectPromise;
-    var masterobjects;
+        permission = null;
 
     function exportAllowed() {
         if (!permission) {
@@ -21,28 +19,25 @@ define(["qlik"], function (qlik) {
     }
 
     getMasterObjectList = function () {
-        if (!masterObjectPromise) {
-            var defer = qlik.Promise.defer();
-            app.getAppObjectList('masterobject', function (data) {
-                var sortedData = data.qAppObjectList.qItems.filter(function (item) {
-                    return KNOWN_CONTAINERS.indexOf(item.qData.visualization) < 0;
-                }).sort(function (item1, item2) {
-                    if (item1.qData.rank < item2.qData.rank) return -1
-                    if (item1.qData.rank > item2.qData.rank) return 1
-                    return item1.qMeta.title.localeCompare(item2.qMeta.title)
-                });
-                masterobjects = sortedData.map(function (item) {
-                    return {
-                        value: item.qInfo.qId,
-                        label: item.qMeta.title
-                    };
-                });
-
-                return defer.resolve(masterobjects);
+        var defer = qlik.Promise.defer();
+        app.getAppObjectList('masterobject', function (data) {
+            var sortedData = data.qAppObjectList.qItems.filter(function (item) {
+                return KNOWN_CONTAINERS.indexOf(item.qData.visualization) < 0;
+            }).sort(function (item1, item2) {
+                if (item1.qData.rank < item2.qData.rank) return -1
+                if (item1.qData.rank > item2.qData.rank) return 1
+                return item1.qMeta.title.localeCompare(item2.qMeta.title)
             });
-            masterObjectPromise = defer.promise;
-        }
-        return masterObjectPromise;
+            var masterobjects = sortedData.map(function (item) {
+                return {
+                    value: item.qInfo.qId,
+                    label: item.qMeta.title
+                };
+            });
+
+            return defer.resolve(masterobjects);
+        });
+        return defer.promise;
     }
 
     function generateItemObject(nbr) {
@@ -65,9 +60,6 @@ define(["qlik"], function (qlik) {
                 component: "dropdown",
                 label: "Master Object",
                 options: function () {
-                    if (masterobjects) {
-                        return masterobjects;
-                    }
                     return getMasterObjectList();
                 }
             },
