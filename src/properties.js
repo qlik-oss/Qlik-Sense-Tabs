@@ -82,6 +82,9 @@ define(["qlik"], function (qlik) {
                 items: {
                     showTitles: {
                         defaultValue: false
+                    },
+                    details: {
+                        show: false
                     }
                 }
             },
