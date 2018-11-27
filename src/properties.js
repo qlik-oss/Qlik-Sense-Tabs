@@ -31,7 +31,7 @@ define(["qlik"], function (qlik) {
             var masterobjects = sortedData.map(function (item) {
                 return {
                     value: item.qInfo.qId,
-                    label: item.qMeta.title
+                    label: item.qMeta.title.length > 50 ? item.qMeta.title.slice(0,50) + '...' : item.qMeta.title,
                 };
             });
 
