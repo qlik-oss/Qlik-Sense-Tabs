@@ -80,7 +80,8 @@ gulp.task('debug', ['clean', 'qext'], function () {
 	return gulp.src([
 		SRC + '/**/*.png', 
 		SRC + '/**/*.js',
-		DIST + '/**/*.qext'
+		DIST + '/**/*.qext',
+		SRC + '/**/*.css'
 	])
 		.pipe(gulp.dest(DIST));
 });
