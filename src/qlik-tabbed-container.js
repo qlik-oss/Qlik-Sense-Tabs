@@ -13,9 +13,10 @@ define([
 ],
 function ($, qlik, props, cssContent) {
 
-	var btn,
-		app = qlik.currApp(this),
-		currActiveTab = null;
+	var app = qlik.currApp(this);
+	// var btn,
+	// 	app = qlik.currApp(this),
+	// 	currActiveTab = null;
 
 	var TEMPLATE = {
 		TAB: '<li class="lui-tab"></li>',
@@ -31,30 +32,29 @@ function ($, qlik, props, cssContent) {
 		return ''+id+'-'+idx;
 	}
 
-	function addExportBtn(id, activeTab, chartId, options) {
-		
-		app.getObject(getPanelId(id, activeTab), chartId, options).then(function(model) {
-			var icon,
-				table = new qlik.table(model),
-				target = $('.tab-contents');
-		
-			icon = $('<span/>',{
-				class: "lui-button__icon  lui-icon  lui-icon--export"
-			});
-			btn = $('<button/>',{
-				id: "export-data-" + activeTab + "-" + id + "",
-				class: "lui-button lui-button lui-button",
-				title: "Export data"
-			})
-			.append(icon).on('click touchstart', function (e) {
-				e.preventDefault();
+	function addExportBtn(id, activeTab, chartId, $el) {
+		var icon,
+			target = $el.find('.tab-contents');
+	
+		icon = $('<span/>',{
+			class: "lui-button__icon  lui-icon  lui-icon--export"
+		});
+		var btn = $('<button/>',{
+			id: "export-data-" + activeTab + "-" + id + "",
+			class: "lui-button lui-button lui-button",
+			title: "Export data"
+		})
+		.append(icon).on('click touchstart', function (e) {
+			e.preventDefault();
+			app.getObject(null, chartId, null).then(function(model) {
+				var table = new qlik.table(model);
 				table.exportData({
 					download: true
 				});
 			});
-			target.append(btn);
 		});
-	}
+		target.append(btn);
+	};
 
 	function showHelpText() {
 
@@ -138,8 +138,6 @@ function ($, qlik, props, cssContent) {
 		objContainer.attr('id', getPanelId(id, activeTab));
 		content.append(objContainer);
 
-		app.getObject(getPanelId(id, activeTab), chartId, options);
-
 		return content;
 	}
 
@@ -171,19 +169,11 @@ function ($, qlik, props, cssContent) {
 			exportData: false,
 			snapshot: false
 		},
-		beforeDestroy: function () {
-			currActiveTab = null;
-
-			if (btn) {
-				btn.off();
-				btn.remove();
-				btn = null;
-			}
-		},
 		paint: function ($element, layout) {
 			var self = this;
 			var id = layout.qInfo.qId;
 			var props = layout.props;
+			var currActiveTab = null;
 			var tabContent,shouldExport;
 			var exportBtn = $element.find('[id^="export-data"]');
 			var tabInstructions = $element.find('.tab-instructions');
@@ -199,12 +189,15 @@ function ($, qlik, props, cssContent) {
             } else {
                 currActiveTab = '1';
 			}
-				
+			
+			shouldExport = props['tab'+currActiveTab].export;
+
 			var stateChanged = this.previousState && 
-				(( this.previousState.canInteract !== canInteract) || ( this.previousState.noSelections !== noSelections));
+				(( this.previousState.canInteract !== canInteract) || 
+				( this.previousState.noSelections !== noSelections) ||
+				(this.previousState.shouldExport !== shouldExport));
 			
 				//Add export button for chart if it does not exist and user has export permissions.
-			shouldExport = props['tab'+currActiveTab].export;
 			
 			//only readd export button if tabs have changed
 			addExportButton = shouldExport && (stateChanged || !this.previousState || this.previousState.currActiveTab !== currActiveTab);
@@ -213,6 +206,7 @@ function ($, qlik, props, cssContent) {
 				'canInteract': canInteract,
 				'noSelections': noSelections,
 				'currActiveTab': currActiveTab,
+				'shouldExport': shouldExport,
 			};
 
 			var getObjectOptions = {
@@ -240,6 +234,16 @@ function ($, qlik, props, cssContent) {
 				tabContent.remove();
 				tabInstructions.remove();
 				extElem.append(renderTabContent(id, currActiveTab, chartId, getObjectOptions));
+				app.getObject(getPanelId(id, currActiveTab), chartId, getObjectOptions).then(function() {
+					app.getAppLayout().then( function (result) {
+						if (shouldExport && result.layout.permissions.exportData) {
+							exportBtn.remove();
+							addExportBtn(id, currActiveTab, chartId, extElem);
+						} else if (!shouldExport ) {
+							exportBtn.remove();
+						}
+		      		});
+				});
 			} else if (!canInteract && chartId === "" && tabInstructions.length < 1) {
 				tabContent.remove();
 				extElem.append(showHelpText());
@@ -257,15 +261,6 @@ function ($, qlik, props, cssContent) {
 				$element.find('.tab-block').remove();
 				$element.find('.tab-instructions').remove();
 			}
-
-			app.getAppLayout().then( function (result) {
-				if (addExportButton && result.layout.permissions.exportData) {
-					exportBtn.remove();
-					addExportBtn(id, currActiveTab, chartId, getObjectOptions);
-				} else if (!shouldExport ) {
-					exportBtn.remove();
-				}
-      });
 		}
 	};
 });
