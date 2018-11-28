@@ -190,26 +190,34 @@ function ($, qlik, props, cssContent) {
 			var parentElem = $element.parent();
 			var extElem = $(TEMPLATE.EXTENSION);
 			var hasExtElem = parentElem.find('.tab-row').length > 0;
-
 			var canInteract = this._interactionState === 1;
 			var noSelections = this.options.noSelections === true;
-			var stateChanged = this.previousState && 
-				(( this.previousState.canInteract !== canInteract) || ( this.previousState.noSelections !== noSelections));
-			this.previousState = {
-				'canInteract': canInteract,
-				'noSelections': noSelections,
-			};
-
-			var getObjectOptions = {
-				'noInteraction': !canInteract,
-				'noSelections': noSelections
-			};
+			
 			var Val = $element.find("ul.lui-tabset li.lui-tab.lui-active").attr("tabnr");
             if (Val != undefined) {
                 currActiveTab = Val;
             } else {
                 currActiveTab = 1;
 			}
+
+			shouldExport = props['tab'+currActiveTab].export;
+			
+			//only readd export button if tabs have changed
+			addExportButton = shouldExport && (!this.previousState || this.previousState.currActiveTab !== currActiveTab);
+				
+			var stateChanged = this.previousState && 
+				(( this.previousState.canInteract !== canInteract) || ( this.previousState.noSelections !== noSelections));
+			
+			this.previousState = {
+				'canInteract': canInteract,
+				'noSelections': noSelections,
+				'currActiveTab': currActiveTab,
+			};
+
+			var getObjectOptions = {
+				'noInteraction': !canInteract,
+				'noSelections': noSelections
+			};
 			var chartId = props['tab'+ currActiveTab].chart;
 
 			//render tab row.
@@ -253,10 +261,10 @@ function ($, qlik, props, cssContent) {
 			shouldExport = props['tab'+currActiveTab].export;
 
 			app.getAppLayout().then( function (result) {
-				if (shouldExport && result.layout.permissions.exportData) {
+				if (addExportButton && result.layout.permissions.exportData) {
 					exportBtn.remove();
 					addExportBtn(id, currActiveTab, chartId, getObjectOptions);
-				} else if (!shouldExport) {
+				} else if (!shouldExport ) {
 					exportBtn.remove();
 				}
       });
