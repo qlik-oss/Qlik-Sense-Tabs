@@ -197,16 +197,17 @@ function ($, qlik, props, cssContent) {
             if (Val != undefined) {
                 currActiveTab = Val;
             } else {
-                currActiveTab = 1;
+                currActiveTab = '1';
 			}
-
-			shouldExport = props['tab'+currActiveTab].export;
-			
-			//only readd export button if tabs have changed
-			addExportButton = shouldExport && (!this.previousState || this.previousState.currActiveTab !== currActiveTab);
 				
 			var stateChanged = this.previousState && 
 				(( this.previousState.canInteract !== canInteract) || ( this.previousState.noSelections !== noSelections));
+			
+				//Add export button for chart if it does not exist and user has export permissions.
+			shouldExport = props['tab'+currActiveTab].export;
+			
+			//only readd export button if tabs have changed
+			addExportButton = shouldExport && (stateChanged || !this.previousState || this.previousState.currActiveTab !== currActiveTab);
 			
 			this.previousState = {
 				'canInteract': canInteract,
@@ -256,9 +257,6 @@ function ($, qlik, props, cssContent) {
 				$element.find('.tab-block').remove();
 				$element.find('.tab-instructions').remove();
 			}
-
-			//Add export button for chart if it does not exist and user has export permissions.
-			shouldExport = props['tab'+currActiveTab].export;
 
 			app.getAppLayout().then( function (result) {
 				if (addExportButton && result.layout.permissions.exportData) {
