@@ -32,6 +32,14 @@ function ($, qlik, props, cssContent) {
 		return ''+id+'-'+idx;
 	}
 
+	function getChartTabId(id, chartId, tabIndex) {
+		return '' + id + '_' + chartId + '-' + tabIndex
+	}
+
+	function getCurrentChartTabId($el) {
+		return $el.find('.tab-contents').attr('chart-id')
+	}
+
 	function addExportBtn(id, activeTab, chartId, $el) {
 		var icon,
 			target = $el.find('.tab-contents');
@@ -134,7 +142,7 @@ function ($, qlik, props, cssContent) {
 			objContainer = $(TEMPLATE.QVOBJECT);
 
 		content.attr('id', id);
-		content.attr('chart-id', chartId+'-'+activeTab);
+		content.attr('chart-id', getChartTabId(id, chartId, activeTab));
 		objContainer.attr('id', getPanelId(id, activeTab));
 		content.append(objContainer);
 
@@ -158,6 +166,15 @@ function ($, qlik, props, cssContent) {
 		});
 	}
 
+	function destroyCurrentChartTabObject($el) {
+		var chartTabId = getCurrentChartTabId($el);
+		$el.find('.tab-instructions').remove();
+		$el.find('.tab-contents').remove();
+		if (chartTabId) {
+			app.destroySessionObject(chartTabId);
+		}
+	};
+
 	return {
 		initialProperties: {
 			version : 1.0,
@@ -170,11 +187,10 @@ function ($, qlik, props, cssContent) {
 			snapshot: false
 		},
 		paint: function ($element, layout) {
-			var self = this;
 			var id = layout.qInfo.qId;
 			var props = layout.props;
 			var currActiveTab = null;
-			var tabContent,shouldExport;
+			var shouldExport;
 			var exportBtn = $element.find('[id^="export-data"]');
 			var tabInstructions = $element.find('.tab-instructions');
 			var parentElem = $element.parent();
@@ -214,6 +230,8 @@ function ($, qlik, props, cssContent) {
 				'noSelections': noSelections
 			};
 			var chartId = props['tab'+ currActiveTab].chart;
+			var newChartTabId = getChartTabId(id, chartId, currActiveTab);
+			var currentChartTabId = getCurrentChartTabId($element);
 
 			//render tab row.
 			if (!hasExtElem) {
@@ -228,24 +246,36 @@ function ($, qlik, props, cssContent) {
 				uppdateTabLabels(parentElem, props);
 			}
 
-			tabContent = $element.find('.tab-contents');
 			//render chart if not the same id already has been rendered.
-			if ((chartId !== "" && tabContent.attr('chart-id') !== chartId+'-'+currActiveTab) || stateChanged) {
-				tabContent.remove();
-				tabInstructions.remove();
+			if ((chartId !== "" && currentChartTabId !== newChartTabId) || stateChanged) {
+				destroyCurrentChartTabObject($element);
 				extElem.append(renderTabContent(id, currActiveTab, chartId, getObjectOptions));
-				app.getObject(getPanelId(id, currActiveTab), chartId, getObjectOptions).then(function() {
-					app.getAppLayout().then( function (result) {
-						if (shouldExport && result.layout.permissions.exportData) {
-							exportBtn.remove();
-							addExportBtn(id, currActiveTab, chartId, extElem);
-						} else if (!shouldExport ) {
-							exportBtn.remove();
-						}
-		      		});
+
+				app.getObjectProperties(chartId).then(function (chartModel) {
+					app.createGenericObject({qInfo: {qId: newChartTabId}}).then(function (model) {
+						model.copyFrom(chartId).then(function () {
+							model.getProperties().then(function (props) {
+								if (!chartModel.properties.qStateName) {
+									// No qStateName on child, so make it inherit qStateName of this
+									props.qStateName = layout.qStateName || '';
+								}
+
+								model.setProperties(props).then(function () {
+									app.visualization.get(newChartTabId).then(function (visualization) {
+										exportBtn.remove();
+										if (visualization.model.layout.permissions.exportData) {
+											addExportBtn(id, currActiveTab, chartId, extElem);
+										}
+										visualization.show(
+											getPanelId(id, currActiveTab), getObjectOptions);
+									});
+								});
+							});
+						});
+					});
 				});
 			} else if (!canInteract && chartId === "" && tabInstructions.length < 1) {
-				tabContent.remove();
+				destroyCurrentChartTabObject($element);
 				extElem.append(showHelpText());
 			}
 
