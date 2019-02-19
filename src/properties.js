@@ -88,9 +88,6 @@ define(["qlik"], function (qlik) {
                     }
                 }
             },
-            selections: {
-                show: false
-            },
             tabs: {
                 grouped: false,
                 type: "items",
