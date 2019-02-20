@@ -14,9 +14,7 @@ define([
 function ($, qlik, props, cssContent) {
 
 	var app = qlik.currApp(this);
-	// var btn,
-	// 	app = qlik.currApp(this),
-	// 	currActiveTab = null;
+	var currentVisualization = null;
 
 	var TEMPLATE = {
 		TAB: '<li class="lui-tab"></li>',
@@ -48,13 +46,13 @@ function ($, qlik, props, cssContent) {
 			class: "lui-button__icon  lui-icon  lui-icon--export"
 		});
 		var btn = $('<button/>',{
-			id: "export-data-" + activeTab + "-" + id + "",
+			id: "export-data-" + getChartTabId(id, chartId, activeTab) + "",
 			class: "lui-button lui-button lui-button",
 			title: "Export data"
 		})
 		.append(icon).on('click touchstart', function (e) {
 			e.preventDefault();
-			app.getObject(null, chartId, null).then(function(model) {
+			app.getObject(null, getChartTabId(id, chartId, activeTab), null).then(function(model) {
 				var table = new qlik.table(model);
 				table.exportData({
 					download: true
@@ -137,7 +135,7 @@ function ($, qlik, props, cssContent) {
 		return tabRow;
 	}
 
-	function renderTabContent(id, activeTab, chartId, options) {
+	function createTabContentContainer(id, activeTab, chartId, options) {
 		var content = $(TEMPLATE.TABCONTENT),
 			objContainer = $(TEMPLATE.QVOBJECT);
 
@@ -167,11 +165,11 @@ function ($, qlik, props, cssContent) {
 	}
 
 	function destroyCurrentChartTabObject($el) {
-		var chartTabId = getCurrentChartTabId($el);
 		$el.find('.tab-instructions').remove();
 		$el.find('.tab-contents').remove();
-		if (chartTabId) {
-			app.destroySessionObject(chartTabId);
+		if (currentVisualization) {
+			currentVisualization.close();
+			currentVisualization = null;
 		}
 	};
 
@@ -249,26 +247,35 @@ function ($, qlik, props, cssContent) {
 			//render chart if not the same id already has been rendered.
 			if ((chartId !== "" && currentChartTabId !== newChartTabId) || stateChanged) {
 				destroyCurrentChartTabObject($element);
-				extElem.append(renderTabContent(id, currActiveTab, chartId, getObjectOptions));
+				extElem.append(createTabContentContainer(id, currActiveTab, chartId, getObjectOptions));
 
 				app.getObjectProperties(chartId).then(function (chartModel) {
-					app.createGenericObject({qInfo: {qId: newChartTabId}}).then(function (model) {
-						model.copyFrom(chartId).then(function () {
-							model.getProperties().then(function (props) {
-								if (!chartModel.properties.qStateName) {
-									// No qStateName on child, so make it inherit qStateName of this
-									props.qStateName = layout.qStateName || '';
-								}
+					return app.getObjectProperties(newChartTabId).then(function (newChartModel) {
+						// Custom object already exists
+						return newChartModel;
+					}).catch(function () {
+						// Custom object doesn't exists, so create it
+						return app.createGenericObject({qInfo: {qId: newChartTabId}}).then(function (newChartModel) {
+							return newChartModel.copyFrom(chartId).then(function () {
+								return newChartModel.getProperties().then(function () {
+									return newChartModel;
+								});
+							});
+						});
+					}).then(function (newChartModel) {
+						if (!chartModel.properties.qStateName) {
+							// No qStateName on child, so make it inherit qStateName of this
+							newChartModel.properties.qStateName = layout.qStateName || '';
+						}
 
-								model.setProperties(props).then(function () {
-									app.visualization.get(newChartTabId).then(function (visualization) {
-										exportBtn.remove();
-										if (visualization.model.layout.permissions.exportData) {
-											addExportBtn(id, currActiveTab, chartId, extElem);
-										}
-										visualization.show(
-											getPanelId(id, currActiveTab), getObjectOptions);
-									});
+						return newChartModel.setProperties(newChartModel.properties).then(function () {
+							return app.visualization.get(newChartTabId).then(function (visualization) {
+								currentVisualization = visualization;
+								return visualization.show(getPanelId(id, currActiveTab), getObjectOptions).then(function () {
+									exportBtn.remove();
+									if (shouldExport && visualization.model.layout.permissions.exportData) {
+										addExportBtn(id, currActiveTab, chartId, extElem);
+									}
 								});
 							});
 						});
