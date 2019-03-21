@@ -1,6 +1,6 @@
 {
     "name": "qlik-tabbed-container",
-    "version": "3.5.0",
+    "version": "0.0.1",
     "description": "An extension which allows you to add a container with tabs.",
     "private": true,
     "homepage": "https://github.com/mhamano/Qlik-Sense-Tabs",
@@ -9,7 +9,6 @@
     "license": "MIT",
     "scripts": {
         "build": "gulp build",
-        "build:debug": "gulp debug",
         "build:zip": "gulp zip",
         "test:unit": "aw chrome -c ./test/aw.config.js"
     },
