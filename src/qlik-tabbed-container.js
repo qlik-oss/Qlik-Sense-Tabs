@@ -195,7 +195,8 @@ function ($, qlik, props, cssContent) {
 			var extElem = $(TEMPLATE.EXTENSION);
 			var hasExtElem = parentElem.find('.tab-row').length > 0;
 			var canInteract = this._interactionState === 1;
-			var noSelections = this.options.noSelections === true;
+			var noSelections = this.options && this.options.noSelections === true;
+			var canZoom = this.options && this.options.zoomEnabled === true;
 			
 			var Val = $element.find("ul.lui-tabset li.lui-tab.lui-active").attr("tabnr");
             if (Val != undefined) {
@@ -272,6 +273,7 @@ function ($, qlik, props, cssContent) {
 							return app.visualization.get(newChartTabId).then(function (visualization) {
 								currentVisualization = visualization;
 								return visualization.show(getPanelId(id, currActiveTab), getObjectOptions).then(function () {
+									extElem.find('.qv-object-wrapper').scope().options.zoomEnabled = canZoom;
 									exportBtn.remove();
 									if (shouldExport && visualization.model.layout.permissions.exportData) {
 										addExportBtn(id, currActiveTab, chartId, extElem);
