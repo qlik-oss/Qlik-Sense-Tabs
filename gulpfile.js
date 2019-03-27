@@ -15,7 +15,7 @@ gulp.task('qext', function () {
 	var qext = {
 		name: 'Tabbed container',
 		type: 'visualization',
-		description: pkg.description,
+		description: pkg.description + '\nVersion: ' + VERSION,
 		version: VERSION,
 		icon: 'folder',
 		preview: 'preview.png',
