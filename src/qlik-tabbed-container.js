@@ -14,7 +14,6 @@ define([
 function ($, qlik, props, cssContent) {
 
 	var app = qlik.currApp(this);
-	var currentVisualization = null;
 
 	var TEMPLATE = {
 		TAB: '<li class="lui-tab"></li>',
@@ -164,12 +163,12 @@ function ($, qlik, props, cssContent) {
 		});
 	}
 
-	function destroyCurrentChartTabObject($el) {
+	function destroyCurrentChartTabObject($el, layout) {
 		$el.find('.tab-instructions').remove();
 		$el.find('.tab-contents').remove();
-		if (currentVisualization) {
-			currentVisualization.close();
-			currentVisualization = null;
+		if (layout.currentVisualization) {
+			layout.currentVisualization.close();
+			layout.currentVisualization = null;
 		}
 	};
 
@@ -247,7 +246,7 @@ function ($, qlik, props, cssContent) {
 
 			//render chart if not the same id already has been rendered.
 			if ((chartId !== "" && currentChartTabId !== newChartTabId) || stateChanged) {
-				destroyCurrentChartTabObject($element);
+				destroyCurrentChartTabObject($element, layout);
 				extElem.append(createTabContentContainer(id, currActiveTab, chartId, getObjectOptions));
 
 				app.getObjectProperties(chartId).then(function (chartModel) {
@@ -271,7 +270,7 @@ function ($, qlik, props, cssContent) {
 
 						return newChartModel.setProperties(newChartModel.properties).then(function () {
 							return app.visualization.get(newChartTabId).then(function (visualization) {
-								currentVisualization = visualization;
+								layout.currentVisualization = visualization;
 								return visualization.show(getPanelId(id, currActiveTab), getObjectOptions).then(function () {
 									extElem.find('.qv-object-wrapper').scope().options.zoomEnabled = canZoom;
 									exportBtn.remove();
@@ -284,7 +283,7 @@ function ($, qlik, props, cssContent) {
 					});
 				});
 			} else if (!canInteract && chartId === "" && tabInstructions.length < 1) {
-				destroyCurrentChartTabObject($element);
+				destroyCurrentChartTabObject($element, layout);
 				extElem.append(showHelpText());
 			}
 
