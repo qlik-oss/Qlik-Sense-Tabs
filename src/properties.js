@@ -1,5 +1,5 @@
 define(["qlik"], function (qlik) {
-    var KNOWN_CONTAINERS = ['qlik-show-hide-container', 'qlik-tabbed-container'];
+    var KNOWN_CONTAINERS = ['qlik-show-hide-container', 'qlik-tabbed-container', 'qlik-trellis-container'];
 
     var app = qlik.currApp(this),
         permission = null;
