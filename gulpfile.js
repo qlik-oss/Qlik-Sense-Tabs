@@ -26,7 +26,8 @@ gulp.task('qext', function () {
 		repository: pkg.repository,
 		dependencies: {
 			'qlik-sense': '>=5.5.x'
-		}
+		},
+		deprecated: '2019-06-27'
 	};
 	if (pkg.contributors) {
 		qext.contributors = pkg.contributors;
